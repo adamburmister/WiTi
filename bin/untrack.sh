@@ -1,3 +1,5 @@
+# remove a user's "redirection" connection track
+
 sudo /usr/sbin/conntrack -L \
     |grep $1 \
     |grep ESTAB \

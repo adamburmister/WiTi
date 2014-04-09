@@ -1,3 +1,5 @@
+# Create IP table filewall rules
+
 IPTABLES=/sbin/iptables
 
 # Create internet chain
