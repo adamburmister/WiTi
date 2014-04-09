@@ -1,11 +1,5 @@
 IPTABLES=/sbin/iptables
 
-# Log dropped packets
-$IPTABLES -N LOGGING
-$IPTABLES -A INPUT -j LOGGING
-$IPTABLES -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
-$IPTABLES -A LOGGING -j DROP
-
 # Create internet chain
 # This is used to authenticate users who have already signed up
 $IPTABLES -N internet -t mangle
