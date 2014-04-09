@@ -1,5 +1,11 @@
 IPTABLES=/sbin/iptables
 
+# Log dropped packets
+$IPTABLES -N LOGGING
+$IPTABLES -A INPUT -j LOGGING
+$IPTABLES -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
+$IPTABLES -A LOGGING -j DROP
+
 # Create internet chain
 # This is used to authenticate users who have already signed up
 $IPTABLES -N internet -t mangle
@@ -25,18 +31,18 @@ $IPTABLES -t mangle -A internet -j MARK --set-mark 99
 #$IPTABLES -t nat -A PREROUTING -m mark --mark 99 -p tcp --dport 80 -j DNAT --to-destination 10.0.0.1
 $IPTABLES -t nat -A PREROUTING -i wlan0 -p tcp -m mark --mark 99 -m tcp --dport 80 -j DNAT --to-destination 192.168.42.1
 
-# Now that we've got to the forward filter, drop all packets
-# marked 99 - these are unknown users. We can't drop them earlier
-# as there's no filter table
-$IPTABLES -t filter -A FORWARD -m mark --mark 99 -j DROP
+# # Now that we've got to the forward filter, drop all packets
+# # marked 99 - these are unknown users. We can't drop them earlier
+# # as there's no filter table
+# $IPTABLES -t filter -A FORWARD -m mark --mark 99 -j DROP
 
-# Do the same for the INPUT chain to stop people accessing the web through Squid
-$IPTABLES -t filter -A INPUT -p tcp --dport 80 -j ACCEPT
-$IPTABLES -t filter -A INPUT -p udp --dport 53 -j ACCEPT
-$IPTABLES -t filter -A INPUT -m mark --mark 99 -j DROP
+# # Do the same for the INPUT chain to stop people accessing the web through Squid
+# $IPTABLES -t filter -A INPUT -p tcp --dport 80 -j ACCEPT
+# $IPTABLES -t filter -A INPUT -p udp --dport 53 -j ACCEPT
+# $IPTABLES -t filter -A INPUT -m mark --mark 99 -j DROP
 
-# Enable Internet connection sharing
+# # Enable Internet connection sharing
 echo "1" > /proc/sys/net/ipv4/ip_forward
-$IPTABLES -A FORWARD -i wlan0 -o eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
-$IPTABLES -A FORWARD -i eth0 -o wlan0 -j ACCEPT
-$IPTABLES -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
