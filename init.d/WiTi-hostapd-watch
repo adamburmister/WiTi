@@ -52,7 +52,7 @@ NAME='WiTi-hostapd-watch'
 NODE_BIN_DIR=/usr/local/bin
 NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
 APPLICATION_DIRECTORY=/home/pi/WiTi/
-APPLICATION_START=bin/hostapd-disconnection-watcher
+APPLICATION_START=bin/hostapd-watcher
 PIDFILE=/tmp/WiTi-hostapd-watch.pid
 LOGFILE=/var/log/WiTi/hostapd.log
 

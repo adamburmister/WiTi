@@ -18,6 +18,8 @@ var REGEX = {
 tail.on("line", function(data) {
 
   if(REGEX.hostapdAssociation.test(data)) {
+    var macAddress = data.match(REGEX.hostapdAssociation)[1];
+    console.log('associated', macAddress);
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
