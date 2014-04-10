@@ -18,34 +18,34 @@ router.get('/', function(req, res) {
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
 
-  // // ... and the corresponding MAC address
-  // require('getmac').getMac(function(err, macAddress){
-  //   if (err) {
-  //     throw err; // There was no MAC address. That means it wasn't a LAN 
-  //   }
+  // ... and the corresponding MAC address
+  require('getmac').getMac(function(err, macAddress){
+    if (err) {
+      throw err; // There was no MAC address. That means it wasn't a LAN 
+    }
 
-  //   var q = { IPAddress: ipAddress, MACAddress: macAddress };
-  //   KnownMACAddress.count(q,
-  //     function(err, hasExistingRecord) {
-  //       if(err) {
-  //         console.log('There was a problem checking the Mongo MAC address collection');
-  //       }
+    // var q = { IPAddress: ipAddress, MACAddress: macAddress };
+    // KnownMACAddress.count(q,
+    //   function(err, hasExistingRecord) {
+    //     if(err) {
+    //       console.log('There was a problem checking the Mongo MAC address collection');
+    //     }
 
-  //       if(hasExistingRecord) {
-  //         console.log('Found known MAC address');
-  //       } else {
-  //         new KnownMACAddress(q).save(function (err) {
-  //           if(err) {
-  //             console.log('There was an error saving a new MAC address');
-  //           }
-  //           console.log('New MAC address');
-  //         });
-  //       }
-  //     }
-  //   );
+    //     if(hasExistingRecord) {
+    //       console.log('Found known MAC address');
+    //     } else {
+    //       new KnownMACAddress(q).save(function (err) {
+    //         if(err) {
+    //           console.log('There was an error saving a new MAC address');
+    //         }
+    //         console.log('New MAC address');
+    //       });
+    //     }
+    //   }
+    // );
 
     res.render('index', { title: 'Welcome', macAddress: macAddress, ipAddress: ipAddress });
-  // });
+  });
 });
 
 module.exports = router;
