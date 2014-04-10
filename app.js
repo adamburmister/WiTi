@@ -24,7 +24,7 @@ var timesheetController = require('./app/controllers/timesheet');
 
 var app = express();
 
-var WiTi_HOSTNAME = process.env.WITI_HOSTNAME 'witi.local';
+var WiTi_HOSTNAME = process.env.WITI_HOSTNAME || 'witi.local';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
