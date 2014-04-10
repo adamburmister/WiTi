@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+// This script monitors syslog for hostapd disassociated events (a client disconnects)
+
+var Tail = require('tail').Tail;
+
+var tail = new Tail("/var/syslog");
+
+tail.on("line", function(data) {
+  console.log(data);
+});

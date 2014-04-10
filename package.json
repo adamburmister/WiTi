@@ -17,6 +17,7 @@
     "mongoose": "^3.8.8",
     "getmac": "^1.0.6",
     "express-partials": "^0.2.0",
-    "twilio": "^1.6.0"
+    "twilio": "^1.6.0",
+    "tail": "^0.3.5"
   }
 }
