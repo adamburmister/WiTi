@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+
+// Record a DHCP connection to the database
