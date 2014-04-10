@@ -2,3 +2,5 @@
 
 // Record a DHCP disconnection to the database
 // See /etc/dhcp/dhcpd.conf
+
+process.exit(code=0)
