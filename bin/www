@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var dotenv = require('dotenv');
-dotenv._getKeysAndValuesFromEnvFilePath('../.env');
+dotenv._getKeysAndValuesFromEnvFilePath(__dirname + '../.env');
 dotenv._setEnvs();
 
 var debug = require('debug')('WiTi');
