@@ -45,6 +45,7 @@ var mongoose = require('mongoose');
 // Connect to mongodb
 var connect = function () {
   var options = { server: { socketOptions: { keepAlive: 1 } } }
+  console.log('Connecting to Mongo', process.env.MONGOHQ_URL);
   mongoose.connect(process.env.MONGOHQ_URL, options);
 }
 connect();
