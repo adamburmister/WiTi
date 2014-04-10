@@ -1,22 +1,23 @@
 var getmac = require('getmac');
 var mongoose = require('mongoose');
+var Employee = mongoose.model('Employee');
 
-exports.weekView = function(req, res, next, id) {
+exports.weekView = function(req, res) {
   require('getmac').getMac(function(err, macAddress){
     if (err) {
       throw err; // There was no MAC address. That means it wasn't a LAN 
     }
 
-    var currentUser = Employee.findOne({ macAddress: macAddress });
-
-    if(!currentUser) {
-      // We don't know this user. Redirect to joining page
+    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+      if (err) throw(err);
       
-    } else {
-      // We know this user. Redirect to timesheet
+      if(!employee) {
+        // We don't know this user. Redirect to joining page
+        res.redirect('/join');
+      } else {
+        res.render('timesheet', { title: 'Welcome', employee: employee });
+      }
+    });
 
-    }
-
-    res.render('index', { title: 'Welcome', macAddress: macAddress, ipAddress: ipAddress });
   });
 }
