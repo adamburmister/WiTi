@@ -1,3 +1,7 @@
+// Load the .env file with our config
+var dotenv = require('dotenv');
+dotenv.load();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
