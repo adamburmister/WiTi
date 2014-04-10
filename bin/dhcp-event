@@ -26,12 +26,17 @@ if(dhcpEvent === 'commit') {
   // we know who they are and they can be allowed web access.
   if(macAddressBelongsToRegisteredEmployee()) {
     // Allow internet access by calling the IPTables script
+    // TODO: Call the IPTables script to allow internet access
+    // TODO: Record a new timesheet start time
   } else {
-    // This is a new connection: record it
+    // This is a new user, they'll need to register before we track
+    // timesheets for them.
+    // Do nothing...
   }
 } else {
   // This is a disconnection: Remove the record
-  // Disallow internet access by calling the IPTables script
+  // TODO: Record a new timesheet end time
+  // TODO: Disallow internet access by calling the IPTables script
 }
 
 // Exit with 0, "All ok"

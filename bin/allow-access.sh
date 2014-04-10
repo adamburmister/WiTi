@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Allow access to the internet for a passed in MAC address
+# allow-access.sh "aa:bb:cc:dd:ee"
 
 IPTABLES=/sbin/iptables
 
