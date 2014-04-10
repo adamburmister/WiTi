@@ -1,24 +1,38 @@
 #!/usr/bin/env node
 
-// Record a DHCP disconnection to the database
+// This script is called whenever a DHCP server event happens (on commit, release, expiry)
 // See /etc/dhcp/dhcpd.conf
 
 // DHCP event callback passes these arguments
 // execute_statement argv[0] = /home/pi/WiTi/bin/dhcp/commit
-// execute_statement argv[1] = commit|release|expire
+// execute_statement argv[1] = commit|release|expiry
 // execute_statement argv[2] = 192.168.42.10
 // execute_statement argv[3] = dc:9b:9c:43:a5:75
 
 var args = process.argv.slice(2); // slice to remove 'node' and 'script' from array
 
 // Extract arguments to vars
-var dhcpEvent = args[1]; // The type of event (commit,release,expire)
+var dhcpEvent = args[1]; // The type of event (commit,release,expiry)
 var ipAddress = args[2];
 var macAddress = args[3];
 
 console.log(dhcpEvent, 'IP:', ipAddress, 'MAC:', macAddress);
 
 // TODO: Maintain a mongo collection of known MAC addresses
+
+if(dhcpEvent === 'commit') {
+  // Someone has connected to the WiFi and been issued a new IP address via DHCP
+  // Check if we've seen a user register this MAC address before. IF they have, then
+  // we know who they are and they can be allowed web access.
+  if(macAddressBelongsToRegisteredEmployee()) {
+    // Allow internet access by calling the IPTables script
+  } else {
+    // This is a new connection: record it
+  }
+} else {
+  // This is a disconnection: Remove the record
+  // Disallow internet access by calling the IPTables script
+}
 
 // Exit with 0, "All ok"
 process.exit(0);
