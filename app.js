@@ -8,7 +8,6 @@ var partials = require('express-partials');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var MONGOHQ_CONFIG = require('./config/mongohq');
 
 var app = express();
 
