@@ -1,14 +1,48 @@
 var express = require('express');
 var router = express.Router();
 var getmac = require('getmac');
+var mongoose = require('mongoose');
 
-/* GET home page. */
+mongoose.connect('mongodb://localhost/WiTi');
+
+var KnownMACAddress = mongoose.model('Known_MAC_Addresses', { 
+  MACAddress: String,
+  IPAddress: String,
+});
+
 router.get('/', function(req, res) {
-  // Fetch the computer's mac address
+  // Get the IP address for the current request
+  var ipAddress = req.headers['x-forwarded-for'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
+  // ... and the corresponding MAC address
   require('getmac').getMac(function(err, macAddress){
     if (err) {
-      throw err;
+      throw err; // There was no MAC address. That means it wasn't a LAN 
     }
+
+    var q = { IPAddress: ipAddress, MACAddress: macAddress };
+    KnownMACAddress.count(q,
+      function(err, hasExistingRecord) {
+        if(err) {
+          console.log('There was a problem checking the Mongo MAC address collection');
+        }
+
+        if(hasExistingRecord) {
+          console.log('Found known MAC address');
+        } else {
+          new KnownMACAddress(q).save(function (err) {
+            if(err) {
+              console.log('There was an error saving a new MAC address');
+            }
+            console.log('New MAC address');
+          });
+        }
+      }
+    );
+
     res.render('index', { title: macAddress });
   });
 });
