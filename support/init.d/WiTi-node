@@ -62,7 +62,10 @@ PATH=$NODE_BIN_DIR:$PATH
 # application process forked by Forever. It will not see any of the other
 # variables defined in this script.
 export NODE_PATH=$NODE_PATH
- 
+
+# Export all the env vars
+awk '/\s/ { system("export " $0) }' /home/pi/WiTi/.env
+
 start() {
     echo "Starting $NAME"
     # We're calling forever directly without using start-stop-daemon for the

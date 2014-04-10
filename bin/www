@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-
-var dotenv = require('dotenv');
-dotenv._getKeysAndValuesFromEnvFilePath(__dirname + '../.env');
-dotenv._setEnvs();
-
-console.log(process.env);
-
 var debug = require('debug')('WiTi');
 var app = require('../app');
 

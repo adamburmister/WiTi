@@ -7,6 +7,10 @@ var logfilePath = "/var/log/syslog";
 var tail = new Tail(logfilePath);
 var sys = require('sys')
 var exec = require('child_process').exec;
+var mongoose = require('mongoose');
+
+require('../app/models/employee');
+var Employee = mongoose.model('Employee');
 
 var REGEX = {
   hostapdAssociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: associated/,
@@ -33,19 +37,21 @@ tail.on("line", function(data) {
     var macAddress = data.match(REGEX.hostapdAssociation)[1];
     console.log('associated', macAddress);
 
-    // Is this MAC used by an existing, verified user?
-    if(belongsToVerifiedEmployee) {
-      // Verified employees can access the internet as normal
-      exec("./allow-access.sh " + macAddress, puts);
-
-      // Log timesheet in event
-      // TODO
+    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+      if (err) throw(err);
       
-    } else {
-      // New users can't proceed onto the internet until they've verified their accounts
-      // and registered their MAC address against their employee profile
-      exec("./disallow-access.sh " + macAddress, puts);
-    }
+      if(employee) {
+        // Verified employees can access the internet as normal
+        exec("./allow-access.sh " + macAddress, puts);
+
+        // Log timesheet in event
+        // TODO
+      } else {
+        // New users can't proceed onto the internet until they've verified their accounts
+        // and registered their MAC address against their employee profile
+        exec("./disallow-access.sh " + macAddress, puts);
+      }
+    });
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];

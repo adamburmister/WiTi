@@ -29,21 +29,3 @@ exports.verify = function(req, res) {
 exports.verifyCode = function(req, res) {
   res.send({ success: true });
 } 
-
-  // require('getmac').getMac(function(err, macAddress){
-  //   if (err) {
-  //     throw err; // There was no MAC address. That means it wasn't a LAN 
-  //   }
-
-  //   var currentUser;// = Employee.findOne({ macAddress: macAddress });
-
-  //   if(!currentUser) {
-  //     // We don't know this user. Redirect to joining page
-      
-  //   } else {
-  //     // We know this user. Redirect to timesheet
-
-  //   }
-
-  //   res.render('join', { title: 'Welcome' });
-  // });
