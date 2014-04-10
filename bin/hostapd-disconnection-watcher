@@ -13,31 +13,31 @@ var REGEX = {
 }
 
 tail.on("line", function(data) {
-/**
-  The syslog will contain log entries like this...
-  
-  |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 IEEE 802.11: associated
-  |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 RADIUS: starting accounting session 5345E537-00000005
-  |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 WPA: pairwise key handshake completed (RSN)
-  |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[0] = /home/pi/WiTi/bin/dhcp-event
-  |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[1] = commit
-  |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[2] = 192.168.42.10
-  |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[3] = dc:9b:9c:43:a5:75
-  |  Apr 10 16:14:06 WiTi dhcpd: execute: /home/pi/WiTi/bin/dhcp-event exit status 32512
-  |  Apr 10 16:14:07 WiTi dhcpd: DHCPREQUEST for 192.168.42.10 from dc:9b:9c:43:a5:75 (Adams-iPhone) via wlan0
-  |  Apr 10 16:14:07 WiTi dhcpd: DHCPACK on 192.168.42.10 to dc:9b:9c:43:a5:75 (Adams-iPhone) via wlan0
-  |  Apr 10 16:15:00 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 IEEE 802.11: disassociated
-  
-  hostapd will log association and disassociations. We are not interested in associations, as the user
-  won't have an IP address yet (we leave that bit to the DHCP event script), but we are interested in
-  the disassociation:
-
-  - Log the end of a timesheet period
-  - Revoke internet access with the IPTables script
-*/
-
   if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
     console.log('disassociation', macAddress);
+
+    /**
+      The syslog will contain log entries like this...
+      
+      |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 IEEE 802.11: associated
+      |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 RADIUS: starting accounting session 5345E537-00000005
+      |  Apr 10 16:14:06 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 WPA: pairwise key handshake completed (RSN)
+      |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[0] = /home/pi/WiTi/bin/dhcp-event
+      |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[1] = commit
+      |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[2] = 192.168.42.10
+      |  Apr 10 16:14:06 WiTi dhcpd: execute_statement argv[3] = dc:9b:9c:43:a5:75
+      |  Apr 10 16:14:06 WiTi dhcpd: execute: /home/pi/WiTi/bin/dhcp-event exit status 32512
+      |  Apr 10 16:14:07 WiTi dhcpd: DHCPREQUEST for 192.168.42.10 from dc:9b:9c:43:a5:75 (Adams-iPhone) via wlan0
+      |  Apr 10 16:14:07 WiTi dhcpd: DHCPACK on 192.168.42.10 to dc:9b:9c:43:a5:75 (Adams-iPhone) via wlan0
+      |  Apr 10 16:15:00 WiTi hostapd: wlan0: STA dc:9b:9c:43:a5:75 IEEE 802.11: disassociated
+      
+      hostapd will log association and disassociations. We are not interested in associations, as the user
+      won't have an IP address yet (we leave that bit to the DHCP event script), but we are interested in
+      the disassociation.
+    */
+    
+    // TODO: Log end of timesheet period
+    // TODO: Revoke internet access with IPTables script
   }
 });
