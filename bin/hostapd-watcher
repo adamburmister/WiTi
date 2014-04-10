@@ -41,12 +41,14 @@ tail.on("line", function(data) {
       if (err) throw(err);
       
       if(employee) {
+        console.log('Allowing access to ', macAddress);
         // Verified employees can access the internet as normal
         exec("./allow-access.sh " + macAddress, puts);
 
         // Log timesheet in event
         // TODO
       } else {
+        console.log('Disallowing access to ', macAddress);
         // New users can't proceed onto the internet until they've verified their accounts
         // and registered their MAC address against their employee profile
         exec("./disallow-access.sh " + macAddress, puts);
