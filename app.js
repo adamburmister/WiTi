@@ -24,6 +24,8 @@ var timesheetController = require('./app/controllers/timesheet');
 
 var app = express();
 
+var WiTi_HOSTNAME = 'WiTi.local';
+
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'ejs');
@@ -60,6 +62,16 @@ mongoose.connection.on('disconnected', function () {
   connect();
 });
 
+/// catch 404 and forwarding to error handler
+app.use(function(req, res, next) {
+  if(req.host != WiTi_HOSTNAME) {
+    res.redirect('http://' + WiTi_HOSTNAME + req.path);
+  } else {
+    next();
+  }
+});
+
+
 app.get('/timesheet', timesheetController.weekView);
 
 app.get('/join', joinController.index);
@@ -68,7 +80,7 @@ app.post('/join/verify', joinController.verifyCode);
 
 app.get('/', homepageController.index);
 
-/// catch 404 and forwarding to error handler
+// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
