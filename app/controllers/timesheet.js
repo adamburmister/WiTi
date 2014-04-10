@@ -18,6 +18,5 @@ exports.weekView = function(req, res) {
         res.render('timesheet', { title: 'Welcome', employee: employee });
       }
     });
-
   });
 }
