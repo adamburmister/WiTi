@@ -15,10 +15,10 @@ exports.index = function(req, res) {
       
       if(!employee) {
         // We don't know this user. Redirect to joining page
-        res.redirect('http://WiTi.local/join');
+        res.redirect('/join');
       } else {
         // We know this user. Redirect to timesheet
-        res.redirect('http://WiTi.local/timesheet');
+        res.redirect('/timesheet');
       }
     });
 

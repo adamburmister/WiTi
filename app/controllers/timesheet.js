@@ -13,7 +13,7 @@ exports.weekView = function(req, res) {
       
       if(!employee) {
         // We don't know this user. Redirect to joining page
-        res.redirect('http://WiTi.local/join');
+        res.redirect('/join');
       } else {
         res.render('timesheet', { title: 'Welcome', employee: employee });
       }

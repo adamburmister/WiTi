@@ -13,7 +13,7 @@ exports.index = function(req, res) {
       
       if(employee) {
         // We don't know this user. Redirect to joining page
-        res.redirect('http://WiTi.local/timesheet');
+        res.redirect('/timesheet');
       } else {
         res.render('join/index', { title: 'Join' });
       }
