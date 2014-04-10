@@ -43,7 +43,7 @@ router.get('/', function(req, res) {
       }
     );
 
-    res.render('index', { title: macAddress });
+    res.render('index', { title: 'Welcome', macAddress: macAddress });
   });
 });
 
