@@ -4,7 +4,8 @@
 
 // Load the .env file with our config
 var dotenv = require('dotenv');
-dotenv._getKeysAndValuesFromEnvFilePath('../.env');
+var envPath = __dirname + '/../.env';
+dotenv._getKeysAndValuesFromEnvFilePath(envPath);
 dotenv._setEnvs();
 
 var Tail = require('tail').Tail;
