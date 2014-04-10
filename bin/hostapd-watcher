@@ -62,6 +62,7 @@ tail.on("line", function(data) {
     // Log end of timesheet period
     // TODO: Log out time
     
+    console.log('Disallowing access to ', macAddress);
     // Revoke internet access with IPTables script
     exec("./disallow-access.sh " + macAddress, puts);
   }
