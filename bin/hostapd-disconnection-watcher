@@ -5,15 +5,21 @@
 var Tail = require('tail').Tail;
 var logfilePath = "/var/log/syslog";
 var tail = new Tail(logfilePath);
+var sys = require('sys')
+var exec = require('child_process').exec;
 
 console.log("Watching", logfilePath);
 
 var REGEX = {
+  hostapdAssociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: associated/,
   hostapdDisassociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: disassociated/
 }
 
 tail.on("line", function(data) {
-  if(REGEX.hostapdDisassociation.test(data)) {
+
+  if(REGEX.hostapdAssociation.test(data)) {
+
+  } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
     console.log('disassociation', macAddress);
 
@@ -37,7 +43,12 @@ tail.on("line", function(data) {
       the disassociation.
     */
     
-    // TODO: Log end of timesheet period
-    // TODO: Revoke internet access with IPTables script
+    // Log end of timesheet period
+    // TODO: Log out time
+    
+    // Revoke internet access with IPTables script
+    function puts(error, stdout, stderr) {sys.puts(stdout)}
+    exec("./disallow-access.sh " + macAddress, puts);
   }
+
 });
