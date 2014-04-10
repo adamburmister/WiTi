@@ -5,9 +5,9 @@ var express = require('express');
 var router = express.Router();
 var getmac = require('getmac');
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGOHQ_URL);
+// mongoose.connect(process.env.MONGOHQ_URL);
 
 // var KnownMACAddress = mongoose.model('Known_MAC_Addresses', { 
 //   MACAddress: String,
