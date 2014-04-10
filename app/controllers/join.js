@@ -1,6 +1,8 @@
 var getmac = require('getmac');
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
+var sys = require('sys')
+var exec = require('child_process').exec;
 
 exports.index = function(req, res) {
   require('getmac').getMac(function(err, macAddress){
@@ -27,5 +29,9 @@ exports.verify = function(req, res) {
 }
 
 exports.verifyCode = function(req, res) {
+  // Verified employees can access the internet as normal
+  function puts(error, stdout, stderr) {sys.puts(stdout)}
+  exec("./allow-access.sh " + macAddress, puts);
+
   res.send({ success: true });
 } 
