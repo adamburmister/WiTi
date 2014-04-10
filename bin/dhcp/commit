@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
 // Record a DHCP connection to the database
+// See /etc/dhcp/dhcpd.conf

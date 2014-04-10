@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
 // Record a DHCP disconnection to the database
+// See /etc/dhcp/dhcpd.conf
