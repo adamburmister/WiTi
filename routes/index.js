@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGOHQ_URL);
 router.get('/', function(req, res) {
   // Get the IP address for the current request
   console.log(req.headers);
-  var ipAddress = req.headers['X-Real-IP'] || 
+  var ipAddress = req.headers['x-real-ip'] || 
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
