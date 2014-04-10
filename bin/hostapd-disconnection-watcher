@@ -4,7 +4,7 @@
 
 var Tail = require('tail').Tail;
 
-var tail = new Tail("/var/syslog");
+var tail = new Tail("/var/log/syslog");
 
 tail.on("line", function(data) {
   console.log(data);
