@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # remove a user's "redirection" connection track
 
 sudo /usr/sbin/conntrack -L \

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Create IP table filewall rules
 
 IPTABLES=/sbin/iptables

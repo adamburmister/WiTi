@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+// Record a DHCP disconnection to the database
+// See /etc/dhcp/dhcpd.conf
+
+// DHCP event callback passes these arguments
+// execute_statement argv[0] = /home/pi/WiTi/bin/dhcp/commit
+// execute_statement argv[1] = commit|release|expire
+// execute_statement argv[2] = 192.168.42.10
+// execute_statement argv[3] = dc:9b:9c:43:a5:75
+
+var args = process.argv.slice(2); // slice to remove 'node' and 'script' from array
+
+// Extract arguments to vars
+var dhcpEvent = args[1]; // The type of event (commit,release,expire)
+var ipAddress = args[2];
+var macAddress = args[3];
+
+console.log(dhcpEvent, 'IP:', ipAddress, 'MAC:', macAddress);
+
+// TODO: Maintain a mongo collection of known MAC addresses
+
+// Exit with 0, "All ok"
+process.exit(0);

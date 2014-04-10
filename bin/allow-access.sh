@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Allow access to the internet for a passed in MAC address
 
 IPTABLES=/sbin/iptables

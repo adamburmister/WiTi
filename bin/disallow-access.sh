@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Disallow internet access for a MAC address
 
 IPTABLES=/sbin/iptables
