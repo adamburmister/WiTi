@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 // Employee
 var employeeSchema = new Schema({
+  _id: Number,
   name: String,
   ipAddress: String,
   macAddress: String,
