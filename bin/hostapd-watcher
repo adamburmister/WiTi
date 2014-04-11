@@ -60,20 +60,20 @@ tail.on("line", function(data) {
 
   if(REGEX.hostapdAssociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdAssociation)[1];
-    console.log('associated', macAddress);
+    console.log('Associated', macAddress);
 
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {
       if (err) throw(err);
       
       if(employee) {
-        console.log('Allowing access to ', macAddress);
+        console.log('... Verified employee found, allowing internet access to ', macAddress);
         // Verified employees can access the internet as normal
         exec("./allow-access.sh " + macAddress, puts);
 
         // Log timesheet in event
         // TODO
       } else {
-        console.log('Disallowing access to ', macAddress);
+        console.log('... No verified employee found (they need to verify), disallowing access to ', macAddress);
         // New users can't proceed onto the internet until they've verified their accounts
         // and registered their MAC address against their employee profile
         exec("./disallow-access.sh " + macAddress, puts);
@@ -82,7 +82,7 @@ tail.on("line", function(data) {
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
-    console.log('disassociation', macAddress);
+    console.log('Disassociation', macAddress);
     
     // Log end of timesheet period
     // TODO: Log out time

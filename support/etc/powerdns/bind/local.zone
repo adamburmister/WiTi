@@ -12,3 +12,5 @@ $TTL 1h
 ns            IN    A      192.168.42.1
 
 www           IN    A      192.168.42.1
+witi          IN    CNAME  www
+WiTi          IN    CNAME  witi
