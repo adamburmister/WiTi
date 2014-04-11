@@ -16,8 +16,11 @@ exports.getMac = function(ipAddress, next) {
     }
 
     var content = data.toString();
-    var leaseRegex = new RegExp("lease " + ipAddress + " \{.*hardware ethernet ((?:[a-z0-9]{2}[:\-]){5}[a-z0-9]{2});.*\}", "i");
-    var matches = content.match(leaseRegex);
+    var leaseRegex = new RegExp("lease " + ipAddress + " \{[^}]*\}", "i");
+    var leaseBlock = content.match(leaseRegex)[0];
+
+    var macRegex = new RegExp("hardware ethernet ((?:[a-z0-9]{2}[:\-]){5}[a-z0-9]{2});", "i");
+    var macAddress = leaseBlock.match(macRegex)[1];
 
     console.log(content, matches);
 
