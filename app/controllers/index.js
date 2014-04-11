@@ -7,19 +7,16 @@ exports.index = function(req, res) {
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
 
-  console.log('Looking up IP address in ARP', ipAddress);
-  
-
-    Employee.findOne({ ipAddress: ipAddress }, function (err, employee) {
-      if (err) throw(err);
-      
-      if(!employee) {
-        // We don't know this user. Redirect to joining page
-        res.redirect('/join');
-      } else {
-        // We know this user. Redirect to timesheet
-        res.redirect('/timesheet');
-      }
-    });
+  Employee.findOne({ ipAddress: ipAddress }, function (err, employee) {
+    if (err) throw(err);
+    
+    if(!employee) {
+      // We don't know this user. Redirect to joining page
+      res.redirect('/join');
+    } else {
+      // We know this user. Redirect to timesheet
+      res.redirect('/timesheet');
+    }
+  });
 
 }
