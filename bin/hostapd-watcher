@@ -46,7 +46,7 @@ var REGEX = {
 function puts(error, stdout, stderr) {sys.puts(stdout)}
 
 // Watch the syslog for hostapd events
-console.log("Watching", logfilePath);
+console.log("Watching", logfilePath, new Date().toString());
 tail.on("line", function(data) {
 
   /**

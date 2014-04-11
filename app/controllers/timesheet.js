@@ -1,4 +1,4 @@
-var arp = require('node-arp');
+var dhcpLease = require('../lib/dhcpLease')
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 
@@ -8,21 +8,24 @@ exports.weekView = function(req, res) {
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
 
-  arp.getMAC(ipAddress, function(err, macAddress) {
-    if (!err) {
+  dhcpLease.getMac(ipAddress, function(err, macAddress) {
+    if(!macAddress) {
       console.log(err);
-      throw err;
-    }
-
-    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
-      if (err) throw(err);
+      res.send("No MAC address was found for your IP address");
+    } else {
+      console.log("Found MAC", macAddress, "for", ipAddress);
       
-      if(!employee) {
-        // We don't know this user. Redirect to joining page
-        res.redirect('/join');
-      } else {
-        res.render('timesheet/week', { title: 'Welcome', employee: employee });
-      }
-    });
+      Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+        if (err) throw(err);
+        
+        if(!employee) {
+          // We don't know this user. Redirect to joining page
+          res.redirect('/join');
+        } else {
+          res.render('timesheet/week', { title: 'Welcome', employee: employee });
+        }
+      });
+    }
   });
+
 }

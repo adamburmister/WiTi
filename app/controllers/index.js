@@ -9,12 +9,13 @@ exports.index = function(req, res) {
      req.connection.socket.remoteAddress;
 
   dhcpLease.getMac(ipAddress, function(err, macAddress) {
-    
     if(!macAddress) {
       console.log(err);
       res.send("No MAC address was found for your IP address");
     } else {
-      Employee.findOne({ ipAddress: ipAddress }, function (err, employee) {
+      console.log("Found MAC", macAddress, "for", ipAddress);
+
+      Employee.findOne({ macAddress: macAddress }, function (err, employee) {
         if (err) throw(err);
         
         if(!employee) {
@@ -26,7 +27,6 @@ exports.index = function(req, res) {
         }
       });
     }
-
   });
 
 }
