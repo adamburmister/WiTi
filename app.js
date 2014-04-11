@@ -25,7 +25,7 @@ var timesheetController = require('./app/controllers/timesheet');
 var app = express();
 
 var WiTi_HOSTNAME = process.env.WITI_HOSTNAME || 'WiTi';
-var REDIRECT_TO_WITI_HOSTNAME = process.env.REDIRECT_TO_HOSTNAME || false;
+var REDIRECT_TO_WITI_HOSTNAME = !!process.env.REDIRECT_TO_HOSTNAME || false;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
