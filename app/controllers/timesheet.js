@@ -1,11 +1,17 @@
-var getmac = require('getmac');
+var arp = require('node-arp');
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 
 exports.weekView = function(req, res) {
-  require('getmac').getMac(function(err, macAddress){
-    if (err) {
-      throw err; // There was no MAC address. That means it wasn't a LAN 
+  var ipAddress = req.headers['x-real-ip'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
+  arp.getMAC(ipAddress, function(err, macAddress) {
+    if (!err) {
+      console.log(err);
+      throw err;
     }
 
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {

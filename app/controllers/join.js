@@ -1,13 +1,19 @@
-var getmac = require('getmac');
+var arp = require('node-arp');
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 var sys = require('sys')
 var exec = require('child_process').exec;
 
 exports.index = function(req, res) {
-  require('getmac').getMac(function(err, macAddress){
-    if (err) {
-      throw err; // There was no MAC address. That means it wasn't a LAN 
+  var ipAddress = req.headers['x-real-ip'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
+  arp.getMAC(ipAddress, function(err, macAddress) {
+    if (!err) {
+      console.log(err);
+      throw err;
     }
 
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {
@@ -24,35 +30,55 @@ exports.index = function(req, res) {
 }
 
 exports.verify = function(req, res) {
-  require('getmac').getMac(function(err, macAddress){
-    res.render('join/verify', { title: 'Register', macAddress: macAddress });
+var ipAddress = req.headers['x-real-ip'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
+  arp.getMAC(ipAddress, function(err, macAddress) {
+    if (!err) {
+      console.log(err);
+      throw err;
+    }
+
+    res.render('join/verify', { title: 'Register' });
   });
 }
 
 exports.verifyCode = function(req, res) {
-  var inviteCode = req.param('inviteCode');
-  var macAddress = req.param('macAddress');
-  console.log('Verifying invite code', inviteCode);
+  var ipAddress = req.headers['x-real-ip'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
 
-  Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
-    if (err) throw(err);
-    
-    if(employee) {
-      console.log('Invite code found', employee);
-
-      employee.inviteCode = null;
-      employee.macAddress = macAddress;
-      employee.save();
-
-      // Verified employees can access the internet as normal
-      exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
-        sys.puts(stdout)
-        res.send({ success: true });
-      });
-    } else {
-      console.log('Invite code not found');
-      res.send({ success: false });
+  arp.getMAC(ipAddress, function(err, macAddress) {
+    if (!err) {
+      console.log(err);
+      throw err;
     }
-  });
 
+    var inviteCode = req.param('inviteCode');
+    console.log('Verifying invite code', inviteCode);
+
+    Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
+      if (err) throw(err);
+      
+      if(employee) {
+        console.log('Invite code found', employee);
+
+        employee.inviteCode = null;
+        employee.macAddress = macAddress;
+        employee.save();
+
+        // Verified employees can access the internet as normal
+        exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
+          sys.puts(stdout)
+          res.send({ success: true });
+        });
+      } else {
+        console.log('Invite code not found');
+        res.send({ success: false });
+      }
+    });
+  });
 } 
