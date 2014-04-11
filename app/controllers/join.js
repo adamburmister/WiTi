@@ -29,23 +29,30 @@ exports.verify = function(req, res) {
 }
 
 exports.verifyCode = function(req, res) {
+  var inviteCode = req.param('inviteCode');
+
   require('getmac').getMac(function(err, macAddress){
     if (err) {
       throw err; // There was no MAC address. That means it wasn't a LAN 
     }
 
-    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+    console.log('Verifying invite code', inviteCode);
+
+    Employee.findOne({ inviteCode: inviteCode }, function (err, employee) {
       if (err) throw(err);
       
       if(employee) {
-        employee.update({ macAddress: macAddress });
+        console.log('Invite code found', employee);
         
+        employee.update({ macAddress: macAddress });
+
         // Verified employees can access the internet as normal
         function puts(error, stdout, stderr) {sys.puts(stdout)}
         exec("./allow-access.sh " + macAddress, puts);
 
         res.send({ success: true });
       } else {
+        console.log('Invite code not found');
         res.send({ success: false });
       }
     });
