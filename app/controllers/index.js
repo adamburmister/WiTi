@@ -8,11 +8,11 @@ exports.index = function(req, res) {
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
 
+  console.log('Looking up IP address in ARP', ipAddress);
   arp.getMAC(ipAddress, function(err, macAddress) {
     if (!err) {
-      console.log(err);
-      res.render('err');
-      return;
+      console.log('MAC not found for IP', ipAddress, err);
+      throw err;
     }
 
     console.log('Client MAC:', macAddress);
