@@ -14,8 +14,8 @@ var tail = new Tail(logfilePath);
 var sys = require('sys')
 var exec = require('child_process').exec;
 var mongoose = require('mongoose');
-require('./app/models/employee');
-require('./app/models/timesheet');
+require('../app/models/employee');
+require('../app/models/timesheet');
 var Employee = mongoose.model('Employee');
 var TimeSheet = mongoose.model('TimeSheet');
 
