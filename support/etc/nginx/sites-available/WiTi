@@ -1,4 +1,5 @@
 server {
+  server_name witi.local;
 
   location / {
     # Force an iOS hotspot popup by cancelling any attempts to navigate to a success page
