@@ -49,7 +49,8 @@ function puts(error, stdout, stderr) {sys.puts(stdout)}
 // Watch the syslog for hostapd events
 console.log("Watching", logfilePath, new Date().toString());
 tail.on("line", function(data) {
-
+  var now = new Date();
+  
   /**
     The syslog will contain log entries like this...
     
@@ -62,7 +63,6 @@ tail.on("line", function(data) {
   if(REGEX.hostapdAssociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdAssociation)[1];
     console.log('Associated', macAddress);
-    var now = new Date();
 
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {
       if (err) throw(err);
