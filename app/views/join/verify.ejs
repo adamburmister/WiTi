@@ -1,6 +1,7 @@
 <h1>Invite code</h1>
 
 <form method="post">
-  <input name="inviteCode">
+  <input name="inviteCode" type="number">
+  <input name="macAddress" type="hidden" value="<%= macAddress %>">
   <button type="submit">Activate</button>
 </form>

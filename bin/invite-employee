@@ -54,8 +54,6 @@ mongoose.connection.on('connected', function (err) {
     var msg = "Welcome to Xero WiTi. Connect to the WiFi '" + (process.env.WITI_SSID || "WiTi") + "' on your phone, " +
       "visit http://" + process.env.WITI_HOSTNAME + " and use invite code " + invited.inviteCode + ".";
 
-    console.log(msg);
-
     client.sms.messages.create({
         to: invited.phone,
         from: process.env.TWILIO_PHONE,
