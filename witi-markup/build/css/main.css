@@ -226,4 +226,11 @@ p {
   clear: left;
 }
 
+#timer {
+  font: 96px Helvetica, Arial, sans-serif;
+  color: #fff;
+  text-align: center;
+  margin-top: 20px;
+}
+
 
