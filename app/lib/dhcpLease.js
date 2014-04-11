@@ -22,12 +22,10 @@ exports.getMac = function(ipAddress, next) {
     var macRegex = new RegExp("hardware ethernet ((?:[a-z0-9]{2}[:\-]){5}[a-z0-9]{2});", "i");
     var macAddress = leaseBlock.match(macRegex)[1];
 
-    console.log(content, matches);
-
-    if(!matches) {
-      next("MAC not found", null);
+    if(!macAddress) {
+      next("MAC not found for " + ipAddress, null);
     } else {
-      next(null, matches[1]);
+      next(null, macAddress);
     }
   })
 }
