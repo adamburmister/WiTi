@@ -42,38 +42,41 @@ exports.verifyCode = function(req, res) {
      req.connection.socket.remoteAddress;
 
   var inviteCode = req.param('inviteCode');
-  console.log('Verifying invite code', inviteCode);
+  if(!inviteCode) {
+    res.send({ success: false });
+  } else {
+    console.log('Verifying invite code', inviteCode);
 
-  dhcpLease.getMac(ipAddress, function(err, macAddress) {
-    if(!macAddress) {
-      console.log(err);
-      res.send("No MAC address was found for your IP address");
-    } else {
-      console.log("Found MAC", macAddress, "for", ipAddress);
+    dhcpLease.getMac(ipAddress, function(err, macAddress) {
+      if(!macAddress) {
+        console.log(err);
+        res.send("No MAC address was found for your IP address");
+      } else {
+        console.log("Found MAC", macAddress, "for", ipAddress);
 
-      Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
-        if (err) throw(err);
-        
-        if(employee) {
-          console.log('Invite code found', employee);
+        Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
+          if (err) throw(err);
+          
+          if(employee) {
+            console.log('Invite code found', employee);
 
-          employee.inviteCode = null;
-          employee.macAddress = macAddress;
-          employee.save();
+            employee.inviteCode = null;
+            employee.macAddress = macAddress;
+            employee.save();
 
-          // Verified employees can access the internet as normal
-          exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
-            sys.puts(stdout)
-            exec("./untrack.sh " + ipAddress);
-            res.send({ success: true });
-          });
-        } else {
-          console.log('Invite code not found');
-          res.send({ success: false });
-        }
-      });
+            // Verified employees can access the internet as normal
+            exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
+              sys.puts(stdout)
+              exec("./untrack.sh " + ipAddress);
+              res.send({ success: true });
+            });
+          } else {
+            console.log('Invite code not found');
+            res.send({ success: false });
+          }
+        });
 
-    }
-  });
-
+      }
+    });
+  }
 } 

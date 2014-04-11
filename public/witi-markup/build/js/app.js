@@ -12,8 +12,10 @@ $(document).ready(function() {
 
     if (val.length <= 4) {
       $("#invalidCode").hide();
-      inputBg.css({"background-position": ( -inputBgWidth + (inputCellWidth * (val.length - 1)) + "px 0px")});
-    } else if(val.length == 4) {
+      inputBg.css({"background-position": ( -inputBgWidth + Math.max(1, inputCellWidth * (val.length - 1)) + "px 0px")});
+    }
+    if(val.length == 4) {
+      console.log("Posting");
       $.post("/join/verify", { inviteCode: inviteInput.val() }, function(resp) {
         if(resp.success) {
           $("#inviteForm").hide();
@@ -22,6 +24,7 @@ $(document).ready(function() {
             location.href='/';
           }, 2000);
         } else {
+          inviteInput.val('');
           $("#invalidCode").show();
           $("#message").html("Sorry, your code was invalid.<br>Try again.");
         }
