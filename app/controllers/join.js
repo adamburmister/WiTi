@@ -38,12 +38,12 @@ exports.verifyCode = function(req, res) {
 
     console.log('Verifying invite code', inviteCode);
 
-    Employee.findOne({ inviteCode: inviteCode }, function (err, employee) {
+    Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
       if (err) throw(err);
       
       if(employee) {
         console.log('Invite code found', employee);
-        
+
         employee.update({ macAddress: macAddress });
 
         // Verified employees can access the internet as normal
