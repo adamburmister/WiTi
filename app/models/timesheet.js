@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 // Timesheet
 var timesheetSchema = new Schema({
-  employee_id: {type: Number, ref: "Employee"},
+  employee_id: {type: Schema.Types.ObjectId, ref: "Employee"},
   timestamp: Date,
   in_times: [Date],
   out_times: [Date]
