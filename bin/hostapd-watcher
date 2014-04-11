@@ -105,7 +105,7 @@ tail.on("line", function(data) {
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
-    console.log('Disassociation', macAddress);
+    console.log('Disassociated', macAddress);
     
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {
       if (err) throw(err);
