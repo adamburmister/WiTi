@@ -16,11 +16,14 @@ exports.getMac = function(ipAddress, next) {
     }
 
     var content = data.toString();
-    var leaseRegex = new RegExp("lease " + ipAddress + " \{[^}]*\}", "i");
-    var leaseBlock = content.match(leaseRegex)[0];
+    try {
+      var leaseRegex = new RegExp("lease " + ipAddress + " \{[^}]*\}", "i");
+      var leaseBlock = content.match(leaseRegex)[0];
 
-    var macRegex = new RegExp("hardware ethernet ((?:[a-z0-9]{2}[:\-]){5}[a-z0-9]{2});", "i");
-    var macAddress = leaseBlock.match(macRegex)[1];
+      var macRegex = new RegExp("hardware ethernet ((?:[a-z0-9]{2}[:\-]){5}[a-z0-9]{2});", "i");
+      var macAddress = leaseBlock.match(macRegex)[1];
+    } catch(e) {
+    }
 
     if(!macAddress) {
       next("MAC not found for " + ipAddress, null);

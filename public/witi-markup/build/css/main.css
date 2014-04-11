@@ -216,4 +216,14 @@ p {
   width: 640px;
 }
 
-
+/* Checkbox */
+#done {
+  float: left;
+  width: 100%;
+}
+#checkmark {
+  width: 143px;
+  height: 200px;
+  background: url(../images/assets.png) -361px 40px no-repeat;
+  margin: 0 auto;
+}

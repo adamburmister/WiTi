@@ -1,6 +1,19 @@
-<h1>Invite code</h1>
+<header class="invite">
+  <h1>INVITE CODE</h1>
+</header>
 
-<form method="post">
-  <input name="inviteCode" type="number">
-  <button type="submit">Activate</button>
+<form id="inviteForm" method="post">
+  <div id="inputCode">
+    <div id="inputBg"></div>
+    <input id="inviteCode" type="text" pattern="[0-9]*" maxlength="4">
+  </div>
+  <p id="message">
+    Enter the invite code<br>sent to your mobile device.
+  </p>
 </form>
+
+<div id="done" class="animated bounceIn" style="display:none">
+  <div id="checkmark"></div>
+</div>
+
+<script src="/witi-markup/build/js/app.js"></script>
