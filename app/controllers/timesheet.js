@@ -15,7 +15,7 @@ exports.weekView = function(req, res) {
         // We don't know this user. Redirect to joining page
         res.redirect('/join');
       } else {
-        res.render('timesheet', { title: 'Welcome', employee: employee });
+        res.render('timesheet/week', { title: 'Welcome', employee: employee });
       }
     });
   });
