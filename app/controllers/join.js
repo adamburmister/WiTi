@@ -29,9 +29,26 @@ exports.verify = function(req, res) {
 }
 
 exports.verifyCode = function(req, res) {
-  // Verified employees can access the internet as normal
-  function puts(error, stdout, stderr) {sys.puts(stdout)}
-  exec("./allow-access.sh " + macAddress, puts);
+  require('getmac').getMac(function(err, macAddress){
+    if (err) {
+      throw err; // There was no MAC address. That means it wasn't a LAN 
+    }
 
-  res.send({ success: true });
+    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+      if (err) throw(err);
+      
+      if(employee) {
+        employee.update({ macAddress: macAddress });
+        
+        // Verified employees can access the internet as normal
+        function puts(error, stdout, stderr) {sys.puts(stdout)}
+        exec("./allow-access.sh " + macAddress, puts);
+
+        res.send({ success: true });
+      } else {
+        res.send({ success: false });
+      }
+    });
+  });
+
 } 
