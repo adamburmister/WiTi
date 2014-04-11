@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+// execute_statement argv[0] = /usr/local/sbin/dhcpevent
+// execute_statement argv[1] = commit
+// execute_statement argv[2] = 192.168.1.40
+// execute_statement argv[3] = 11:aa:bb:cc:dd:ee
+// execute_statement argv[4] = d1.jp
+
+var args = process.argv.slice(2);
+var ipAddress = args[2];
+var macAddress = args[3];
+
+// Load the .env file with our config
+var dotenv = require('dotenv');
+var envPath = __dirname + '/../.env';
+dotenv._getKeysAndValuesFromEnvFilePath(envPath);
+dotenv._setEnvs();
+
+var mongoose = require('mongoose');
+require('../app/models/employee');
+var Employee = mongoose.model('Employee');
+
+// Bootstrap db connection
+// Connect to mongodb
+var connect = function () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } }
+  console.log('Connecting to Mongo', process.env.MONGOHQ_URL);
+  mongoose.connect(process.env.MONGOHQ_URL, options);
+}
+connect();
+
+// Error handler
+mongoose.connection.on('error', function (err) {
+  console.log(err)
+});
+
+// Reconnect when closed
+mongoose.connection.on('disconnected', function () {
+  connect();
+});
+
+mongoose.connection.on('connected', function() {
+  Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+    if(employee) {
+      employee.ipAddress = ipAddress;
+      employee.save();
+    }
+  });
+});

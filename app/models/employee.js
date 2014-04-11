@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 // Employee
 var employeeSchema = new Schema({
   name: String,
+  ipAddress: String,
   macAddress: String,
   phone: String,
   inviteCode: Number

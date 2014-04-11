@@ -1,4 +1,3 @@
-var arp = require('node-arp');
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 
@@ -9,15 +8,9 @@ exports.index = function(req, res) {
      req.connection.socket.remoteAddress;
 
   console.log('Looking up IP address in ARP', ipAddress);
-  arp.getMAC(ipAddress, function(err, macAddress) {
-    if (!err) {
-      console.log('MAC not found for IP', ipAddress, err);
-      throw err;
-    }
+  
 
-    console.log('Client MAC:', macAddress);
-
-    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+    Employee.findOne({ ipAddress: ipAddress }, function (err, employee) {
       if (err) throw(err);
       
       if(!employee) {
@@ -28,6 +21,5 @@ exports.index = function(req, res) {
         res.redirect('/timesheet');
       }
     });
-  });
 
 }
