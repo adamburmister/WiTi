@@ -1,4 +1,4 @@
-var arp = require('node-arp');
+var dhcpLease = require('../lib/dhcpLease')
 var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 var sys = require('sys')
@@ -10,14 +10,23 @@ exports.index = function(req, res) {
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
 
-  Employee.findOne({ ipAddress: ipAddress }, function (err, employee) {
-    if (err) throw(err);
-    
-    if(employee) {
-      // We don't know this user. Redirect to joining page
-      res.redirect('/timesheet');
+  dhcpLease.getMac(ipAddress, function(err, macAddress) {
+    if(!macAddress) {
+      console.log(err);
+      res.send("No MAC address was found for your IP address");
     } else {
-      res.render('join/index', { title: 'Join' });
+      console.log("Found MAC", macAddress, "for", ipAddress);
+
+      Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+        if (err) throw(err);
+        
+        if(employee) {
+          // We don't know this user. Redirect to joining page
+          res.redirect('/timesheet');
+        } else {
+          res.render('join/index', { title: 'Join' });
+        }
+      });
     }
   });
 }
@@ -35,24 +44,36 @@ exports.verifyCode = function(req, res) {
   var inviteCode = req.param('inviteCode');
   console.log('Verifying invite code', inviteCode);
 
-  Employee.findOne({ ipAddress: ipAddress, inviteCode: +inviteCode }, function (err, employee) {
-    if (err) throw(err);
-    
-    if(employee) {
-      console.log('Invite code found', employee);
-
-      employee.inviteCode = null;
-      employee.macAddress = macAddress;
-      employee.save();
-
-      // Verified employees can access the internet as normal
-      exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
-        sys.puts(stdout)
-        res.send({ success: true });
-      });
+  dhcpLease.getMac(ipAddress, function(err, macAddress) {
+    if(!macAddress) {
+      console.log(err);
+      res.send("No MAC address was found for your IP address");
     } else {
-      console.log('Invite code not found');
-      res.send({ success: false });
+      console.log("Found MAC", macAddress, "for", ipAddress);
+
+      Employee.findOne({ inviteCode: +inviteCode }, function (err, employee) {
+        if (err) throw(err);
+        
+        if(employee) {
+          console.log('Invite code found', employee);
+
+          employee.inviteCode = null;
+          employee.macAddress = macAddress;
+          employee.save();
+
+          // Verified employees can access the internet as normal
+          exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
+            sys.puts(stdout)
+            exec("./untrack.sh " + ipAddress);
+            res.send({ success: true });
+          });
+        } else {
+          console.log('Invite code not found');
+          res.send({ success: false });
+        }
+      });
+
     }
   });
+
 } 

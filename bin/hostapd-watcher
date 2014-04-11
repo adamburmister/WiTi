@@ -14,6 +14,10 @@ var tail = new Tail(logfilePath);
 var sys = require('sys')
 var exec = require('child_process').exec;
 var mongoose = require('mongoose');
+require('../app/models/employee');
+require('../app/models/timesheet');
+var Employee = mongoose.model('Employee');
+var TimeSheet = mongoose.model('TimeSheet');
 
 // Bootstrap db connection
 // Connect to mongodb
@@ -34,9 +38,6 @@ mongoose.connection.on('disconnected', function () {
   connect();
 });
 
-require('../app/models/employee');
-var Employee = mongoose.model('Employee');
-
 var REGEX = {
   hostapdAssociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: associated/,
   hostapdDisassociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: disassociated/
@@ -46,7 +47,7 @@ var REGEX = {
 function puts(error, stdout, stderr) {sys.puts(stdout)}
 
 // Watch the syslog for hostapd events
-console.log("Watching", logfilePath);
+console.log("Watching", logfilePath, new Date().toString());
 tail.on("line", function(data) {
 
   /**
@@ -61,6 +62,7 @@ tail.on("line", function(data) {
   if(REGEX.hostapdAssociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdAssociation)[1];
     console.log('Associated', macAddress);
+    var now = new Date();
 
     Employee.findOne({ macAddress: macAddress }, function (err, employee) {
       if (err) throw(err);
@@ -71,7 +73,28 @@ tail.on("line", function(data) {
         exec("./allow-access.sh " + macAddress, puts);
 
         // Log timesheet in event
-        // TODO
+        // Is there a timesheet for today?
+        TimeSheet.findOne({ employee_id: employee.id, timestamp: {$lte: now} }, function(err, ts) { 
+          if(!ts) {
+            console.log("... No existing timesheet for today found");
+            TimeSheet.create({
+              employee_id: employee.id,
+              timestamp: now,
+              in_times: [ now ],
+              out_times: []
+            }, function(err, ts) {
+              if(err) {
+                console.log(err);
+              }
+              console.log("... Created new timesheet", ts);
+            });
+          } else {
+            console.log("... Adding in time to timesheet");
+            ts.in_times.push(now);
+            ts.save();
+          }
+        });
+
       } else {
         console.log('... No verified employee found (they need to verify), disallowing access to ', macAddress);
         // New users can't proceed onto the internet until they've verified their accounts
@@ -82,14 +105,33 @@ tail.on("line", function(data) {
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
-    console.log('Disassociation', macAddress);
+    console.log('Disassociated', macAddress);
     
-    // Log end of timesheet period
-    // TODO: Log out time
-    
-    console.log('Disallowing access to ', macAddress);
-    // Revoke internet access with IPTables script
-    exec("./disallow-access.sh " + macAddress, puts);
+    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+      if (err) throw(err);
+      
+      if(employee) {
+        console.log('... Verified employee found, allowing internet access to ', macAddress);
+        // Verified employees can access the internet as normal
+        exec("./allow-access.sh " + macAddress, puts);
+
+        // Log timesheet in event
+        // Is there a timesheet for today?
+        TimeSheet.findOne({ employee_id: employee.id, timestamp: {$lte: now} }, function(err, ts) { 
+          if(!ts) {
+            console.log("... No existing timesheet for today found");
+          } else {
+            console.log("... Adding out time to timesheet");
+            ts.out_times.push(now);
+            ts.save();
+          }
+        });
+      }
+
+      console.log('... Disallowing access to ', macAddress);
+      // Revoke internet access with IPTables script
+      exec("./disallow-access.sh " + macAddress, puts);
+    });
   }
 
 });

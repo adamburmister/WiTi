@@ -3,10 +3,10 @@ var Schema = mongoose.Schema;
 
 // Timesheet
 var timesheetSchema = new Schema({
-  employee_id: {type: Number, ref: "Employee"},
-  date: Date,
+  employee_id: {type: Schema.Types.ObjectId, ref: "Employee"},
+  timestamp: Date,
   in_times: [Date],
   out_times: [Date]
 });
 
-var Timesheet = mongoose.model('Timesheet', timesheetSchema);
+var TimeSheet = mongoose.model('TimeSheet', timesheetSchema);
