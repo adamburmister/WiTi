@@ -11,8 +11,21 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var partials = require('express-partials');
 
+// Models
+var models_path = __dirname + '/app/models'
+fs.readdirSync(models_path).forEach(function (file) {
+  if (~file.indexOf('.js')) require(models_path + '/' + file)
+});
+
+// Controllers
+var homepageController = require('./app/controllers/index');
+var joinController = require('./app/controllers/join');
+var timesheetController = require('./app/controllers/timesheet');
+
 var app = express();
-var routes = require('./app/routes')(app);
+
+var WiTi_HOSTNAME = process.env.WITI_HOSTNAME || 'WiTi';
+var REDIRECT_TO_WITI_HOSTNAME = !!(process.env.REDIRECT_TO_HOSTNAME || false);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
@@ -35,6 +48,7 @@ var mongoose = require('mongoose');
 // Connect to mongodb
 var connect = function () {
   var options = { server: { socketOptions: { keepAlive: 1 } } }
+  console.log('Connecting to Mongo', process.env.MONGOHQ_URL);
   mongoose.connect(process.env.MONGOHQ_URL, options);
 }
 connect();
@@ -49,14 +63,60 @@ mongoose.connection.on('disconnected', function () {
   connect();
 });
 
-// Bootstrap models
-var models_path = __dirname + '/app/models'
-fs.readdirSync(models_path).forEach(function (file) {
-  if (~file.indexOf('.js')) require(models_path + '/' + file)
-})
+// Redirect incoming request to the offical hostname
+if(REDIRECT_TO_WITI_HOSTNAME) {
+  console.log('Will redirect to', WiTi_HOSTNAME);
 
-// app.use('/', index);
-// app.use('/timesheet', timesheet);
-// app.use('/join', join);
+  app.use(function(req, res, next) {
+    if(req.host != WiTi_HOSTNAME) {
+      var url = 'http://' + WiTi_HOSTNAME;
+      console.log("Redirecting to", url);
+      res.redirect(url);
+    } else {
+      next();
+    }
+  });
+}
+
+// Routes
+
+app.get('/timesheet', timesheetController.weekView);
+
+app.get('/join', joinController.index);
+app.get('/join/verify', joinController.verify);
+app.post('/join/verify', joinController.verifyCode);
+
+app.get('/', homepageController.index);
+
+// catch 404 and forwarding to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+/// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
 module.exports = app;

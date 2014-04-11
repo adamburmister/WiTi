@@ -7,6 +7,7 @@
 :POSTROUTING ACCEPT [837:130782]
 :internet - [0:0]
 -A PREROUTING -i wlan0 -p tcp -m tcp --dport 80 -j internet
+-A PREROUTING -i wlan0 -p tcp -m tcp --dport 443 -j internet
 -A internet -j MARK --set-xmark 0x63/0xffffffff
 COMMIT
 # Completed on Wed Apr  9 23:40:14 2014
@@ -17,6 +18,7 @@ COMMIT
 :OUTPUT ACCEPT [11:670]
 :POSTROUTING ACCEPT [10:600]
 -A PREROUTING -i wlan0 -p tcp -m mark --mark 0x63 -m tcp --dport 80 -j DNAT --to-destination 192.168.42.1
+-A PREROUTING -i wlan0 -p tcp -m mark --mark 0x63 -m tcp --dport 443 -j DNAT --to-destination 192.168.42.1
 -A POSTROUTING -o eth0 -j MASQUERADE
 COMMIT
 # Completed on Wed Apr  9 23:40:14 2014

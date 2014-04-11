@@ -2,11 +2,40 @@
 
 // This script monitors syslog for hostapd disassociated events (a client disconnects)
 
+// Load the .env file with our config
+var dotenv = require('dotenv');
+var envPath = __dirname + '/../.env';
+dotenv._getKeysAndValuesFromEnvFilePath(envPath);
+dotenv._setEnvs();
+
 var Tail = require('tail').Tail;
 var logfilePath = "/var/log/syslog";
 var tail = new Tail(logfilePath);
 var sys = require('sys')
 var exec = require('child_process').exec;
+var mongoose = require('mongoose');
+
+// Bootstrap db connection
+// Connect to mongodb
+var connect = function () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } }
+  console.log('Connecting to Mongo', process.env.MONGOHQ_URL);
+  mongoose.connect(process.env.MONGOHQ_URL, options);
+}
+connect();
+
+// Error handler
+mongoose.connection.on('error', function (err) {
+  console.log(err)
+});
+
+// Reconnect when closed
+mongoose.connection.on('disconnected', function () {
+  connect();
+});
+
+require('../app/models/employee');
+var Employee = mongoose.model('Employee');
 
 var REGEX = {
   hostapdAssociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: associated/,
@@ -31,29 +60,34 @@ tail.on("line", function(data) {
 
   if(REGEX.hostapdAssociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdAssociation)[1];
-    console.log('associated', macAddress);
+    console.log('Associated', macAddress);
 
-    // Is this MAC used by an existing, verified user?
-    if(belongsToVerifiedEmployee) {
-      // Verified employees can access the internet as normal
-      exec("./allow-access.sh " + macAddress, puts);
-
-      // Log timesheet in event
-      // TODO
+    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+      if (err) throw(err);
       
-    } else {
-      // New users can't proceed onto the internet until they've verified their accounts
-      // and registered their MAC address against their employee profile
-      exec("./disallow-access.sh " + macAddress, puts);
-    }
+      if(employee) {
+        console.log('... Verified employee found, allowing internet access to ', macAddress);
+        // Verified employees can access the internet as normal
+        exec("./allow-access.sh " + macAddress, puts);
+
+        // Log timesheet in event
+        // TODO
+      } else {
+        console.log('... No verified employee found (they need to verify), disallowing access to ', macAddress);
+        // New users can't proceed onto the internet until they've verified their accounts
+        // and registered their MAC address against their employee profile
+        exec("./disallow-access.sh " + macAddress, puts);
+      }
+    });
 
   } else if(REGEX.hostapdDisassociation.test(data)) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
-    console.log('disassociation', macAddress);
+    console.log('Disassociation', macAddress);
     
     // Log end of timesheet period
     // TODO: Log out time
     
+    console.log('Disallowing access to ', macAddress);
     // Revoke internet access with IPTables script
     exec("./disallow-access.sh " + macAddress, puts);
   }

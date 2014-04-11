@@ -15,10 +15,14 @@
     "ejs": "~0.8.5",
     "node-compass": "0.2.3",
     "mongoose": "^3.8.8",
-    "getmac": "^1.0.6",
     "express-partials": "^0.2.0",
     "twilio": "^1.6.0",
     "tail": "^0.3.5",
-    "dotenv": "^0.2.7"
+    "dotenv": "^0.2.7",
+    "commander": "^2.2.0",
+    "node-arp": "^1.0.4"
+  },
+  "devDependencies": {
+    "commander": "^2.2.0"
   }
 }

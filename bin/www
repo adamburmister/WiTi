@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
-var debug = require('debug')('my-application');
+var dotenv = require('dotenv');
+var envPath = __dirname + '/../.env';
+dotenv._getKeysAndValuesFromEnvFilePath(envPath);
+dotenv._setEnvs();
+
+var debug = require('debug')('WiTi');
 var app = require('../app');
 
 app.set('port', process.env.PORT || 3000);
