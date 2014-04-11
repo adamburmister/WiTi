@@ -14,6 +14,10 @@ var tail = new Tail(logfilePath);
 var sys = require('sys')
 var exec = require('child_process').exec;
 var mongoose = require('mongoose');
+require('../app/models/employee');
+require('../app/models/timesheet');
+var Employee = mongoose.model('Employee');
+var TimeSheet = mongoose.model('TimeSheet');
 
 // Bootstrap db connection
 // Connect to mongodb
@@ -33,9 +37,6 @@ mongoose.connection.on('error', function (err) {
 mongoose.connection.on('disconnected', function () {
   connect();
 });
-
-require('../app/models/employee');
-var Employee = mongoose.model('Employee');
 
 var REGEX = {
   hostapdAssociation: /hostapd: wlan0: STA (..:..:..:..:..:..) IEEE 802.11: associated/,
