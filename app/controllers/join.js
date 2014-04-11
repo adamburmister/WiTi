@@ -49,10 +49,10 @@ exports.verifyCode = function(req, res) {
         employee.save();
 
         // Verified employees can access the internet as normal
-        function puts(error, stdout, stderr) {sys.puts(stdout)}
-        exec("./allow-access.sh " + macAddress, puts);
-
-        res.send({ success: true });
+        exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
+          sys.puts(stdout)
+          res.send({ success: true });
+        });
       } else {
         console.log('Invite code not found');
         res.send({ success: false });
