@@ -227,3 +227,17 @@ p {
   background: url(../images/assets.png) -361px 40px no-repeat;
   margin: 0 auto;
 }
+
+#calendar {
+ width: 640px;
+ height: 642px;
+ background: url(../images/assets.png) no-repeat 0 -220px;
+ clear: left;
+}
+
+#timer {
+ font: 96px Helvetica, Arial, sans-serif;
+ color: #fff;
+ text-align: center;
+ margin-top: 20px;
+}
