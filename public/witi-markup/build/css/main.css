@@ -18,6 +18,7 @@ UNIVERSAL STYLES
   width: 640px;
   height: 1136px;
   position: relative;
+  overflow: hidden;
 }
 
 /**********
