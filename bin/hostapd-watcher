@@ -50,7 +50,7 @@ function puts(error, stdout, stderr) {sys.puts(stdout)}
 console.log("Watching", logfilePath, new Date().toString());
 tail.on("line", function(data) {
   var now = new Date();
-  
+
   /**
     The syslog will contain log entries like this...
     
@@ -107,7 +107,7 @@ tail.on("line", function(data) {
     var macAddress = data.match(REGEX.hostapdDisassociation)[1];
     console.log('Disassociated', macAddress);
     
-    Employee.findOne({ macAddress: macAddress }, function (err, employee) {
+    Employee.findOne({ macAddress: macAddress }).sort('field -timestamp').exec(function (err, employee) {
       if (err) throw(err);
       
       if(employee) {
@@ -117,7 +117,7 @@ tail.on("line", function(data) {
 
         // Log timesheet in event
         // Is there a timesheet for today?
-        TimeSheet.findOne({ employee_id: employee.id, timestamp: {$lte: now} }, function(err, ts) { 
+        TimeSheet.findOne({ employee_id: employee.id, timestamp: { $lte: now } }, function(err, ts) { 
           if(!ts) {
             console.log("... No existing timesheet for today found");
           } else {
