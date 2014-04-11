@@ -83,7 +83,10 @@ tail.on("line", function(data) {
               in_times: [ now ],
               out_times: []
             }, function(err, ts) {
-              console.log("... Created new timesheet");
+              if(err) {
+                console.log(err);
+              }
+              console.log("... Created new timesheet", ts);
             });
           } else {
             console.log("... Adding in time to timesheet");
@@ -125,7 +128,7 @@ tail.on("line", function(data) {
         });
       }
 
-      console.log('Disallowing access to ', macAddress);
+      console.log('... Disallowing access to ', macAddress);
       // Revoke internet access with IPTables script
       exec("./disallow-access.sh " + macAddress, puts);
     });
