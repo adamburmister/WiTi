@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+// Load the .env file with our config
+var dotenv = require('dotenv');
+var envPath = __dirname + '/../.env';
+dotenv._getKeysAndValuesFromEnvFilePath(envPath);
+dotenv._setEnvs();
+
+var twilio = require('twilio');
+var program = require('commander');
+
+// Setup the command line program
+program
+  .option('-n, --name <full-name>', 'full name')
+  .option('-p, --phone <phone-number>', 'mobile phone number')
+  .parse(process.argv);
+
+var empl = {
+  name: program.name,
+  phone: program.phone,
+  inviteCode: Math.floor(Math.random() * 9000) + 1000
+};
+
+if(!empl.name || !empl.phone) {
+  console.log("Call with name and phone number. See --help for more.");
+  process. exit(1);
+}
+
+// Setup a mongo db
+var mongoose = require('mongoose');
+require('../app/models/employee');
+var Employee = mongoose.model('Employee');
+
+var connect = function () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } }
+  console.log('Connecting to Mongo', process.env.MONGOHQ_URL);
+  mongoose.connect(process.env.MONGOHQ_URL, options);
+}
+
+// Error handler
+mongoose.connection.on('error', function (err) {
+  console.log(err)
+});
+
+mongoose.connection.on('connected', function (err) {
+  Employee.create(empl, function(err, invited) {
+    if(err) {
+      throw err;
+    }
+
+    console.log("Created new employee", empl);
+
+    var client = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+    var msg = "Welcome to Xero WiTi. Connect to the WiFi '" + (process.env.WITI_SSID || "WiTi") + "' on your phone, " +
+      "visit http://" + process.env.WITI_HOSTNAME + " and use invite code " + invited.inviteCode + ".";
+
+    console.log(msg);
+
+    client.sms.messages.create({
+        to: invited.phone,
+        from: process.env.TWILIO_PHONE,
+        body: msg
+    }, function(error, message) {
+        if (error) {
+          invited.delete();
+          console.log(error.message);
+        }
+        console.log('SMS sent');
+        process.exit(0);
+      }
+    );
+
+  });
+
+});
+
+connect();

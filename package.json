@@ -19,6 +19,10 @@
     "express-partials": "^0.2.0",
     "twilio": "^1.6.0",
     "tail": "^0.3.5",
-    "dotenv": "^0.2.7"
+    "dotenv": "^0.2.7",
+    "commander": "^2.2.0"
+  },
+  "devDependencies": {
+    "commander": "^2.2.0"
   }
 }
