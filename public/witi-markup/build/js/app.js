@@ -1,21 +1,21 @@
 $(document).ready(function() {
 
-  var inviteInput = $("input[type=text"),
+  var inviteInput = $("input"),
       inputBg = $("#inputBg"),
       inputBgWidth = 420,
       inputCellWidth = 138;
 
   inviteInput.focus();
 
-  inviteInput.on("keyup", function(event) {
+  inviteInput.on("keyup", function(e) {
     var val = inviteInput.val();
 
     if (val.length <= 4) {
       $("#invalidCode").hide();
       inputBg.css({"background-position": ( -inputBgWidth + Math.max(1, inputCellWidth * (val.length - 1)) + "px 0px")});
     }
+
     if(val.length == 4) {
-      console.log("Posting");
       $.post("/join/verify", { inviteCode: inviteInput.val() }, function(resp) {
         if(resp.success) {
           $("#inviteForm").hide();
