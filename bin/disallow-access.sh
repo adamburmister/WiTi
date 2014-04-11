@@ -5,6 +5,6 @@
 
 IPTABLES=/sbin/iptables
 
-echo "Disallowing internet access for $1"
+echo "Disallowing internet access for $1" >> /var/log/WiTi/iptables-access
 
 $IPTABLES -D internet -t mangle -m mac --mac-source $1 -j RETURN

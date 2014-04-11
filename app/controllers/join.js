@@ -21,7 +21,6 @@ exports.index = function(req, res) {
       }
     });
   });
-
 }
 
 exports.verify = function(req, res) {
