@@ -1,0 +1,219 @@
+/* FONTS */
+@font-face {
+font-family: National-Book;
+src: url(../fonts/National-Book.otf);
+}
+
+@font-face {
+font-family: National-Book-SemiBold;
+src: url(../fonts/National-Semibold.otf);
+}
+
+/********** 
+UNIVERSAL STYLES 
+**********/
+
+#wrapper {
+  background-color: #45474d;
+  width: 640px;
+  height: 1136px;
+  position: relative;
+}
+
+/**********
+HOME STYLES
+**********/
+
+#logo {
+  width: 200px;
+  height: 199px;
+  background: url(../images/assets.png) 0 0 no-repeat;
+  margin: 230px 0 0 220px;
+  float: left;
+}
+
+header {
+  float: left;
+  clear: left;
+  width: 640px;
+  margin: -50px  auto 0 auto;
+  color: #fff;
+  text-align: center;
+  -moz-animation-delay: 0.5s;
+  -webkit-animation-delay: 0.5s;
+  -o-animation-delay: 0.5s;
+}
+
+.moveUp {
+  margin-top: 0;
+}
+
+header h1 {
+  font-family: "National-Book", Helvetica, sans-serif;
+}
+
+header.witi h1 {
+  font-size: 60px ;
+  letter-spacing: 3px;
+  margin: 155px 0 30px 0;
+}
+
+header h2 {
+  font: 36px "National-Book-Semibold", Helvetica, sans-serif;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+#buttons {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  -moz-animation-delay: .75s;
+  -webkit-animation-delay: .75s;
+  -o-animation-delay: .75s;
+}
+
+#buttons a {
+  height: 120px;
+  display: block;
+  color: #fff;
+  font: 48px/120px "National-Book", Helvetica, sans-serif;
+  text-decoration: none;
+  text-align: center;
+}
+
+#about a {
+  width: 552px;
+  border: 4px solid #fff;
+  background-color: transparent;
+  border-radius: 4px;
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  margin: 0 0 40px 0;
+}
+
+#new a {
+  width: 560px;
+  background: #7ad201; /* Old browsers */
+  background: -moz-linear-gradient(top,  #7ad201 0%, #5eaf02 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7ad201), color-stop(100%,#5eaf02)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #7ad201 0%,#5eaf02 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #7ad201 0%,#5eaf02 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #7ad201 0%,#5eaf02 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #7ad201 0%,#5eaf02 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7ad201', endColorstr='#5eaf02',GradientType=0 ); /* IE6-9 */
+  border-radius: 4px;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+#circles {
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  border: 50px solid rgba(255, 255, 255, 0.025);
+  border-radius: 100%;
+}
+
+#circle1 {
+  width: 300px;
+  height: 300px;
+  top: 132px;
+  left: 120px;
+  -moz-animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+  -o-animation-delay: 1s;
+  -moz-animation-duration: 2s;
+  -webkit-animation-duration: 2s;
+  -o-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  opacity: 1;
+}
+
+#circle2 {
+  width: 500px;
+  height: 500px;
+  top: 32px;
+  left: 20px;
+  opacity: .75;
+}
+
+#circle3 {
+  width: 700px;
+  height: 700px;
+  top: -68px;
+  left: -80px;
+  opacity: .5;
+}
+
+#circle4 {
+  width: 900px;
+  height: 900px;
+  top: -168px;
+  left: -180px;
+  opacity: .25;
+}
+
+/**********
+INVITE STYLES
+**********/
+
+header.invite {
+  width: 640px;
+  height: 150px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+header.invite h1 {
+  font-size: 48px;
+  line-height: 140px;
+}
+
+#inputCode {
+  position: relative;
+  top: 155px;
+  left: 55px;
+}
+
+#inputBg {
+  width: 530px;
+  height: 130px;
+  background-image: url(../images/inputs.png);
+  background-repeat: no-repeat;
+  background-position: -420px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+input[type=text] {
+  width: 570px;
+  height: 130px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  font: 72px/130px Monospace;
+  letter-spacing: 93px;
+  color: #fff;
+  padding-left: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+p {
+  font: 32px/36px "National-Book", Helvetica, sans-serif;
+  color: #fff;
+  text-align: center; 
+  margin: 240px 0 0 0;
+  float: left;
+  width: 640px;
+}
+
+
