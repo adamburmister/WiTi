@@ -44,7 +44,7 @@ exports.verifyCode = function(req, res) {
       if(employee) {
         console.log('Invite code found', employee);
 
-        employee.update({ macAddress: macAddress });
+        employee.update({ inviteCode: null, macAddress: macAddress });
 
         // Verified employees can access the internet as normal
         function puts(error, stdout, stderr) {sys.puts(stdout)}
