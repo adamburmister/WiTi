@@ -1,0 +1,15 @@
+$ORIGIN local
+$TTL 1h
+@             IN    SOA ns.local hostmaster.local (
+                    1; serial
+                    1d; refresh
+                    2h; retry
+                    4w; expire
+                    1h; minimum time-to-live
+              )
+              IN    NS     ns
+              IN    A      192.168.42.1
+raspberrypi   IN    CNAME  ns
+witi          IN    CNAME  ns
+WiTi          IN    CNAME  ns
+ns            IN    A      192.168.42.1
