@@ -77,6 +77,14 @@ tail.on("line", function(data) {
         TimeSheet.findOne({ employee_id: employee.id, timestamp: {$lte: now} }, function(err, ts) { 
           if(!ts) {
             console.log("... No existing timesheet for today found");
+            TimeSheet.create({
+              employee_id: employee.id,
+              timestamp: now,
+              in_times: [ now ],
+              out_times: []
+            }, function(err, ts) {
+              console.log("... Created new timesheet");
+            });
           } else {
             console.log("... Adding in time to timesheet");
             ts.in_times.push(now);
