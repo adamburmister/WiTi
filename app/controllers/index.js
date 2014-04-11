@@ -11,7 +11,8 @@ exports.index = function(req, res) {
   arp.getMAC(ipAddress, function(err, macAddress) {
     if (!err) {
       console.log(err);
-      throw err;
+      res.render('err');
+      return;
     }
 
     console.log('Client MAC:', macAddress);
