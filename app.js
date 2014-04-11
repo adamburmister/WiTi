@@ -65,15 +65,17 @@ mongoose.connection.on('disconnected', function () {
 
 // Redirect incoming request to the offical hostname
 if(REDIRECT_TO_WITI_HOSTNAME) {
-  app.use(function(req, res, next) {
-    if(REDIRECT_TO_WITI_HOSTNAME && req.host != WiTi_HOSTNAME) {
-      var url = 'http://' + WiTi_HOSTNAME + req.path;
-      console.log("Redirecting to", url);
-      res.redirect(url);
-    } else {
-      next();
-    }
-  });
+  console.log('Will redirect to', WiTi_HOSTNAME);
+  
+  // app.use(function(req, res, next) {
+  //   if(req.host != WiTi_HOSTNAME) {
+  //     var url = 'http://' + WiTi_HOSTNAME + req.path;
+  //     console.log("Redirecting to", url);
+  //     res.redirect(url);
+  //   } else {
+  //     next();
+  //   }
+  // });
 }
 
 // Routes
