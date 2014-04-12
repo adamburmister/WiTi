@@ -1,0 +1,8 @@
+MONGOHQ_URL="mongodb://URL"
+WITI_HOSTNAME=www.witi.local
+REDIRECT_TO_HOSTNAME=true
+WITI_SSID=WiTi
+DHCP_LEASE_FILE_PATH=/var/lib/dhcp/dhcpd.leases
+TWILIO_PHONE="+1 415-528-7708"
+TWILIO_SID=yoursid
+TWILIO_AUTH_TOKEN=yourtoken

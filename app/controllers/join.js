@@ -66,7 +66,6 @@ exports.verifyCode = function(req, res) {
 
             // Verified employees can access the internet as normal
             exec("./allow-access.sh " + macAddress, function puts(error, stdout, stderr) {
-              sys.puts(stdout)
               exec("./untrack.sh " + ipAddress);
               res.send({ success: true });
             });
