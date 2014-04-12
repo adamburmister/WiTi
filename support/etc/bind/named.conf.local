@@ -9,4 +9,5 @@
 zone "witi.local." {
 	type master;
 	file "/etc/bind/db.witi.local";
+	allow-update { none; };
 };
