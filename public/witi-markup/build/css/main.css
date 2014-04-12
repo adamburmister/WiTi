@@ -16,9 +16,8 @@ UNIVERSAL STYLES
 #wrapper {
   background-color: #45474d;
   width: 640px;
-  height: 1136px;
+  height: 950px;
   position: relative;
-  overflow: hidden;
 }
 
 /**********
@@ -29,15 +28,18 @@ HOME STYLES
   width: 200px;
   height: 199px;
   background: url(../images/assets.png) 0 0 no-repeat;
-  margin: 230px 0 0 220px;
+  margin: 130px 0 0 220px;
   float: left;
+}
+
+header.witi {
+  margin: -100px  auto 0 auto;
 }
 
 header {
   float: left;
   clear: left;
   width: 640px;
-  margin: -50px  auto 0 auto;
   color: #fff;
   text-align: center;
   -moz-animation-delay: 0.5s;
@@ -56,7 +58,7 @@ header h1 {
 header.witi h1 {
   font-size: 60px ;
   letter-spacing: 3px;
-  margin: 155px 0 30px 0;
+  margin: 155px 0 20px 0;
 }
 
 header h2 {
@@ -67,7 +69,7 @@ header h2 {
 
 #buttons {
   position: absolute;
-  bottom: 40px;
+  bottom: 80px;
   left: 40px;
   -moz-animation-delay: .75s;
   -webkit-animation-delay: .75s;
@@ -123,7 +125,7 @@ header h2 {
 #circle1 {
   width: 300px;
   height: 300px;
-  top: 132px;
+  top: 32px;
   left: 120px;
   -moz-animation-delay: 1s;
   -webkit-animation-delay: 1s;
@@ -140,7 +142,7 @@ header h2 {
 #circle2 {
   width: 500px;
   height: 500px;
-  top: 32px;
+  top: -68px;
   left: 20px;
   opacity: .75;
 }
@@ -148,7 +150,7 @@ header h2 {
 #circle3 {
   width: 700px;
   height: 700px;
-  top: -68px;
+  top: -168px;
   left: -80px;
   opacity: .5;
 }
@@ -156,7 +158,7 @@ header h2 {
 #circle4 {
   width: 900px;
   height: 900px;
-  top: -168px;
+  top: -268px;
   left: -180px;
   opacity: .25;
 }
@@ -173,12 +175,12 @@ header.invite {
 
 header.invite h1 {
   font-size: 48px;
-  line-height: 140px;
+  line-height: 110px;
 }
 
 #inputCode {
   position: relative;
-  top: 155px;
+  top: 219px;
   left: 55px;
 }
 
@@ -193,7 +195,7 @@ header.invite h1 {
   left: 0;
 }
 
-input[type=text] {
+input[type="text"] {
   width: 570px;
   height: 130px;
   outline: none;
@@ -217,28 +219,18 @@ p {
   width: 640px;
 }
 
-/* Checkbox */
-#done {
-  float: left;
-  width: 100%;
-}
-#checkmark {
-  width: 143px;
-  height: 200px;
-  background: url(../images/assets.png) -361px 40px no-repeat;
-  margin: 0 auto;
-}
-
 #calendar {
- width: 640px;
- height: 642px;
- background: url(../images/assets.png) no-repeat 0 -220px;
- clear: left;
+  width: 640px;
+  height: 642px;
+  background: url(../images/assets.png) no-repeat 0 -220px;
+  clear: left;
 }
 
 #timer {
- font: 96px Helvetica, Arial, sans-serif;
- color: #fff;
- text-align: center;
- margin-top: 20px;
+  font: 96px Helvetica, Arial, sans-serif;
+  color: #fff;
+  text-align: center;
+  margin-top: 20px;
 }
+
+
